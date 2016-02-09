@@ -7,11 +7,11 @@ def url_open(url):
     '''
     req = urllib.request.Request(url)
     req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36')
-    response = urllib.request.urlopen(url)
+    response = urllib.request.urlopen(req)
     html = response.read( )
-
     print(url)
     return html
+
     '''
     ipList = ['218.106.96.201:81' , '218.106.96.203:81' , '218.106.96.204:80']
     ip_port = random.choice(ipList)
@@ -25,23 +25,25 @@ def url_open(url):
 
     response = urllib.request.urlopen(url)
     html = response.read()
-    return html;
+
+    return html
+
+
     
 # get newest page number from ooxx html
 def get_page(url):
       html = url_open(url).decode('utf-8')
 
-      pre = html.find('current-comment-page') + 23 # >[
-      aft = html.find(']', pre) # from a to ']'
+      pre = html.find('current-comment-page') + 23    # >[
+      aft = html.find(']', pre)                                          # from a to ']'
 
-      return html[pre : aft]  # return the number in html within the range
+      return html[pre : aft]                                            # return the number in html within the range
 
 
 
-def find_imgs(page_url):
-    html = url_open(page_url).decode('utf-8')
-    img_addrs = [ ]
-
+def find_imgs(url):
+    html = url_open(url).decode('utf-8')
+    img_addrs = []
     pre = html.find('img src=')
 
     while pre != -1:
@@ -53,13 +55,14 @@ def find_imgs(page_url):
 
         pre = html.find('img src=' ,  aft)
 
-        for each in img_addrs:
-            print(each)
+    for each in img_addrs:
+        print(each)
 
-       #return img_addrs 
+    return img_addrs 
          
-            
 
+
+            
 def save_imgs(folder, img_addrs):
     for each in img_addrs:
         filename = each.split('/')[-1]
@@ -69,12 +72,13 @@ def save_imgs(folder, img_addrs):
 
 
 
+
+
 def download_mm(folder='mm_picture' , pages=10):
     # create folder,  change directory
     os.mkdir(folder)
     os.chdir(folder)
-
-   
+    
     url = 'http://jandan.net/ooxx/'
     #url = 'http://www.baidu.com'
     page_num = int(get_page(url))
